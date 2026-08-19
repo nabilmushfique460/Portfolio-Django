@@ -1,0 +1,35 @@
+{# contact.html - the Contact page. Only the content block is filled in. #}
+{% extends "base.html" %}
+
+{% block title %}Contact | Web Developer Portfolio{% endblock %}
+
+{% block content %}
+
+    <section class="contact-intro">
+        <h2>Get In Touch</h2>
+        <p>
+            Have a project in mind or a question about my services?
+            Fill out the form below and I'll get back to you.
+        </p>
+    </section>
+
+    {% if success %}
+        <p class="success-message">
+            Thank you! Your message has been received.
+        </p>
+    {% endif %}
+
+    <form method="post" class="contact-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send Message</button>
+    </form>
+
+    <section class="contact-info">
+        <h3>Contact Information</h3>
+        <p>Email: nabil29089@gmail.com</p>
+        <p>Phone: (000) 000-0000</p>
+        <p>Address: 123 Example Street, Your City, Country</p>
+    </section>
+
+{% endblock %}
