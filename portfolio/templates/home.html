@@ -1,23 +1,95 @@
-{# home.html - the Home page. Only the content block is filled in; #}
-{# the header, nav, and footer come from base.html. #}
+{# home.html - the Home page with fullscreen video hero. #}
+{# The header, nav, and footer come from base.html. #}
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home | S.M. Nabil Mushfique{% endblock %}
 
+{% block main_class %}{% endblock %}
+
+{% block hero_video %}
+<!-- Fullscreen background video -->
+<video class="video-bg" autoplay muted loop playsinline>
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4" type="video/mp4">
+</video>
+<div class="video-overlay"></div>
+{% endblock %}
+
 {% block content %}
 
+<!-- ==================== HERO SECTION ==================== -->
 <section class="hero">
-    <h2>Custom Web Development, Built Around Your Business</h2>
-    <p>
-        I'm a full-stack web developer who designs, builds, and maintains
-        fast, secure, and reliable websites and web applications. From a
-        simple company site to a full backend system with a database and
-        custom admin dashboard, I help clients turn their ideas into
-        working software.
-    </p>
+    <div class="hero-content">
+
+        <!-- Tagline -->
+        <div class="hero-tagline animate-fade-up">
+            <!-- Crown icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/>
+                <path d="M5 21h14"/>
+            </svg>
+            <span>FULL-STACK ENGINEER</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="hero-heading animate-fade-up-delay-1">
+            SHIP.<br>
+            BREAK.<br>
+            REBUILD.
+        </h1>
+
+        <!-- Subtext -->
+        <p class="hero-subtext animate-fade-up-delay-2">
+           I build fast, resilient web products that hold up under
+            <strong>real traffic</strong> — not just in a Figma file.
+        </p>
+
+        <!-- CTA Row -->
+        <div class="hero-cta-row animate-fade-up-delay-3">
+            <!-- Primary CTA Button -->
+            <a href="{% url 'services' %}" class="btn-primary">
+                SEE OUR WORK
+                <!-- ArrowUpRight icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+            </a>
+
+            <!-- Award Badge (hidden on mobile) -->
+            <div class="award-badge">
+                <!-- Award icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="6"/>
+                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                </svg>
+                <div class="award-badge-text">
+                    Top-Rated<br>Brand Studio
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="hero-stats animate-fade-up-delay-4">
+            <div class="hero-stat">
+                <div class="hero-stat-value">250+</div>
+                <div class="hero-stat-label">Brands Transformed</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">95%</div>
+                <div class="hero-stat-label">Client Retention</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">10+</div>
+                <div class="hero-stat-label">Years in the Game</div>
+            </div>
+        </div>
+
+    </div>
 </section>
 
-<section class="services-overview">
+<!-- ==================== SERVICES OVERVIEW ==================== -->
+<section class="main-content services-overview" style="position: relative; z-index: 2;">
     <h2>What I Offer</h2>
 
     <div class="service-card">
@@ -63,7 +135,7 @@
     </div>
 </section>
 
-<section class="cta">
+<section class="main-content cta" style="position: relative; z-index: 2;">
     <p>Ready to start your project?</p>
     <a href="{% url 'services' %}" class="cta-link">See All Services</a>
 </section>

@@ -51,7 +51,7 @@ def contact(request):
             user_body = (
                 f"Hi {name},\n\n"
                 f"Thank you for contacting me. I have received your message and will get back to you as soon as possible.\n\n"
-                f"--- Your Submitted Message ---\n"
+                f"Your Submitted Message:\n"
                 f"{message}\n\n"
                 f"Best regards,\n"
                 f"S.M. Nabil Mushfique"

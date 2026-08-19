@@ -13,28 +13,110 @@ bar, and footer only need to be written once, here.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}S.M. Nabil Mushfique{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/8b75d9dcff6a48c35a46656192adf019?family=FSP+DEMO+-+PODIUM+Sharp+4.11" rel="stylesheet">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
+    <!-- Background video (only rendered on home page) -->
+    {% block hero_video %}{% endblock %}
+
+    <!-- ==================== NAVBAR ==================== -->
     <header class="site-header">
-        <h1 class="site-title">S.M. Nabil Mushfique</h1>
+        <!-- Brand -->
+        <a href="{% url 'home' %}" class="site-title font-podium">NABIL</a>
+
+        <!-- Desktop Nav Links (hidden below md) -->
         <nav class="main-nav">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'services' %}">Services</a>
-            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'home' %}">Projects</a>
+            <a href="{% url 'about' %}">Studio</a>
+            <a href="{% url 'services' %}">Offerings</a>
+            <a href="{% url 'contact' %}">Inquire</a>
         </nav>
+
+        <!-- Desktop CTA (hidden below md) -->
+        <a href="{% url 'contact' %}" class="nav-cta">
+            GET IN TOUCH
+            <!-- ArrowUpRight icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+        </a>
+
+        <!-- Hamburger (visible below md) -->
+        <button class="hamburger" id="menuToggle" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
-    <main class="main-content">
+    <!-- ==================== MOBILE MENU OVERLAY ==================== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-brand font-podium">NABIL</span>
+            <button class="mobile-close" id="menuClose" aria-label="Close menu">
+                <!-- X icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-menu-body">
+            <a href="{% url 'home' %}" class="mobile-menu-link" style="transition-delay: 100ms;" onclick="closeMenu()">Projects</a>
+            <a href="{% url 'about' %}" class="mobile-menu-link" style="transition-delay: 180ms;" onclick="closeMenu()">Studio</a>
+            <a href="{% url 'services' %}" class="mobile-menu-link" style="transition-delay: 260ms;" onclick="closeMenu()">Offerings</a>
+            <a href="{% url 'contact' %}" class="mobile-menu-link" style="transition-delay: 340ms;" onclick="closeMenu()">Inquire</a>
+            <a href="{% url 'contact' %}" class="mobile-menu-cta" style="transition-delay: 420ms;" onclick="closeMenu()">
+                GET IN TOUCH
+                <!-- ArrowUpRight icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE CONTENT ==================== -->
+    <main class="{% block main_class %}main-content{% endblock %}">
         {% block content %}{% endblock %}
     </main>
 
+    <!-- ==================== FOOTER ==================== -->
     <footer class="site-footer">
         <p>&copy; {% now "Y" %} S.M. Nabil Mushfique. All rights reserved.</p>
     </footer>
+
+    <!-- ==================== MOBILE MENU SCRIPT ==================== -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const menuClose = document.getElementById('menuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        function openMenu() {
+            mobileMenu.classList.add('menu-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.remove('menu-open');
+            document.body.style.overflow = '';
+        }
+
+        menuToggle.addEventListener('click', openMenu);
+        menuClose.addEventListener('click', closeMenu);
+    </script>
 
 </body>
 
