@@ -1,12 +1,16 @@
 # Admin registration for the portfolio app.
 #
-# We aren't using any database models yet (the site is fully static
-# content), so there is nothing to register here right now. If you
-# later add a model (for example a Service model to manage services
-# through the admin), register it in this file like:
-#
-#   from django.contrib import admin
-#   from .models import Service
-#   admin.site.register(Service)
+# Register models here so they can be viewed and managed via
+# the Django admin interface (/admin).
 
-from django.contrib import admin  # noqa: F401
+from django.contrib import admin
+from .models import ContactMessage
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created_at')
+    search_fields = ('name', 'email', 'message')
+    list_filter = ('created_at',)
+    readonly_fields = ('created_at',)
+

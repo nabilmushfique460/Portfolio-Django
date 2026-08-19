@@ -1,23 +1,25 @@
 {% comment %}
-  base.html - the master template.
-  Every other page (home.html, about.html, services.html, contact.html)
-  starts with {% extends "base.html" %} and only fills in the
-  {% block content %} section below. That way the header, navigation
-  bar, and footer only need to be written once, here.
+base.html - the master template.
+Every other page (home.html, about.html, services.html, contact.html)
+starts with {% extends "base.html" %} and only fills in the
+{% block content %} section below. That way the header, navigation
+bar, and footer only need to be written once, here.
 {% endcomment %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Web Developer Portfolio{% endblock %}</title>
+    <title>{% block title %}S.M. Nabil Mushfique{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
 
     <header class="site-header">
-        <h1 class="site-title">Web Developer Portfolio</h1>
+        <h1 class="site-title">S.M. Nabil Mushfique</h1>
         <nav class="main-nav">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'about' %}">About</a>
@@ -31,8 +33,9 @@
     </main>
 
     <footer class="site-footer">
-        <p>&copy; {% now "Y" %} Web Developer Portfolio. All rights reserved.</p>
+        <p>&copy; {% now "Y" %} S.M. Nabil Mushfique. All rights reserved.</p>
     </footer>
 
 </body>
+
 </html>

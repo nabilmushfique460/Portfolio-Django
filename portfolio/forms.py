@@ -1,21 +1,22 @@
 # Forms for the portfolio app.
 #
-# ContactForm is a plain Django "forms.Form" (not tied to a database
-# model). It simply describes which fields the contact form has and
-# how each one should be validated.
+# ContactForm is a Django ModelForm tied to the ContactMessage model.
+# It handles form validation and allows saving submissions directly to the database.
 
 from django import forms
+from .models import ContactMessage
 
 
-class ContactForm(forms.Form):
-    name = forms.CharField(
-        max_length=100,
-        label="Your Name",
-    )
-    email = forms.EmailField(
-        label="Your Email",
-    )
-    message = forms.CharField(
-        label="Message",
-        widget=forms.Textarea(attrs={'rows': 5}),
-    )
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'message']
+        labels = {
+            'name': 'Your Name',
+            'email': 'Your Email',
+            'message': 'Message',
+        }
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 5}),
+        }
+
