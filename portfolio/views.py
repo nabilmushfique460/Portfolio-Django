@@ -220,6 +220,100 @@ def load_projects_from_csv():
     return projects
 
 
+SERVICES_DATA = [
+    {
+        'id': '01',
+        'title': 'Custom Full Stack Web Applications',
+        'category': 'FULL STACK ARCHITECTURE',
+        'description': 'End-to-end bespoke web platforms architected with Django, Python, and modern responsive frontends. Built with domain-driven design, robust ORM modeling, role-based access control (RBAC), secure authentication flows, and high-performance server-side rendering.',
+        'deliverables': [
+            'Modular Django / Flask Core Engine',
+            'Dynamic Responsive UI with Vanilla JS',
+            'Role-Based Permissions & Auth Systems',
+            'Unit & Integration Test Coverage'
+        ],
+        'tags': ['Django', 'Python', 'HTML5 / CSS3', 'JavaScript', 'SQLite / MySQL'],
+        'image': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80',
+        'badge': 'FLAGSHIP OFFERING',
+    },
+    {
+        'id': '02',
+        'title': 'High Throughput REST APIs and Microservices',
+        'category': 'BACKEND AND MICROSERVICES',
+        'description': 'Stateless, scalable RESTful API backends and webhook microservices built with Django REST Framework and Flask. Engineered for low-latency JSON delivery, granular token authentication (JWT / Bearer), rate-limiting, and comprehensive Swagger/OpenAPI interactive documentation.',
+        'deliverables': [
+            'Stateless REST Microservice Endpoints',
+            'JWT & Token-Based Authentication',
+            'Automated OpenAPI / Swagger Interactive Docs',
+            'Rate Limiting, Throttling & Caching'
+        ],
+        'tags': ['Django REST Framework', 'Flask', 'JSON API', 'Redis Caching', 'Postman'],
+        'image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+        'badge': 'MICROSERVICES',
+    },
+    {
+        'id': '03',
+        'title': 'Relational Database Architecture and Query Tuning',
+        'category': 'DATABASE AND STORAGE',
+        'description': 'High-integrity relational schema design, 3NF normalization, index optimization, and transaction management. Specialized in tuning slow database queries, eliminating N+1 ORM bottlenecks, managing non-destructive migrations, and ensuring ACID consistency.',
+        'deliverables': [
+            'Normalized Relational Schema Architecture',
+            'Index Optimization & Query Profiling',
+            'ACID Transactions & Row-Level Locking',
+            'Non-Destructive Migration Scripts'
+        ],
+        'tags': ['MySQL', 'PostgreSQL', 'SQLite', 'Django ORM', 'SQL Profiling'],
+        'image': 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=1200&q=80',
+        'badge': 'DATA INTEGRITY',
+    },
+    {
+        'id': '04',
+        'title': 'Automated Data Pipelines and Web Scraping',
+        'category': 'DATA EXTRACTION AND ETL',
+        'description': 'Automated data harvesting, cleansing, transformation, and ingestion pipelines. Built with BeautifulSoup, Selenium, and background scheduling to reliably extract unstructured web data, parse dynamic JavaScript pages, validate schemas, and sync cleanly into production databases.',
+        'deliverables': [
+            'Headless Multi-Threaded Scraping Engines',
+            'Anti-Bot Handling & Proxy Support',
+            'Schema Validation & ETL Normalization',
+            'Automated Scheduled Execution'
+        ],
+        'tags': ['Python', 'BeautifulSoup', 'Selenium', 'Pandas ETL', 'Cron Automation'],
+        'image': 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+        'badge': 'AUTOMATION',
+    },
+    {
+        'id': '05',
+        'title': 'Computer Vision and Intelligent Image Systems',
+        'category': 'COMPUTER VISION AND AI',
+        'description': 'Real-time video stream processing, motion detection, contour analysis, and automated image transformation pipelines using OpenCV and NumPy. Developing computer vision tools that integrate seamlessly with web services and standalone automated workflows.',
+        'deliverables': [
+            'Live Webcam Frame Analysis & Motion Tracking',
+            'Contour Detection & Visual Filtering',
+            'Automated Batch Image Processing',
+            'Matplotlib & OpenCV Stream Integration'
+        ],
+        'tags': ['OpenCV', 'Python', 'NumPy', 'Computer Vision', 'Matplotlib'],
+        'image': 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=1200&q=80',
+        'badge': 'VISION AND AI',
+    },
+    {
+        'id': '06',
+        'title': 'Cross Platform Desktop GUI and Enterprise Tools',
+        'category': 'DESKTOP APPLICATIONS',
+        'description': 'Native graphical user interface desktop applications built with PyQt6 / PySide. Tailored for administrative dashboards, offline database tools, school and student management portals, automated PDF invoice generation, and custom internal enterprise software.',
+        'deliverables': [
+            'Native Cross-Platform GUI (Windows / macOS / Linux)',
+            'Embedded SQLite Local Database Support',
+            'Automated PDF & Excel Export Engines',
+            'Standalone Executable Packaging'
+        ],
+        'tags': ['PyQt6', 'Python', 'Qt Designer', 'ReportLab PDF', 'SQLite'],
+        'image': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+        'badge': 'DESKTOP SUITE',
+    },
+]
+
+
 def home(request):
     """Show the Home page (hero section + services overview)."""
     return render(request, 'home.html')
@@ -232,8 +326,8 @@ def about(request):
 
 
 def services(request):
-    """Show the Services page (service list lives in the template)."""
-    return render(request, 'services.html')
+    """Show the Services / Offerings page."""
+    return render(request, 'services.html', {'services': SERVICES_DATA})
 
 
 def contact(request):

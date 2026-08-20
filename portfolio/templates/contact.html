@@ -1,35 +1,436 @@
-{# contact.html - the Contact page. Only the content block is filled in. #}
+{# contact.html - Engineering Inquiries & Direct Communication #}
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Contact | S.M. Nabil Mushfique{% endblock %}
+{% block title %}Contact & Inquiries | S.M. Nabil Mushfique{% endblock %}
+
+{% block main_class %}contact-page-wrapper{% endblock %}
 
 {% block content %}
 
-<section class="contact-intro">
-    <h2>Get In Touch</h2>
-    <p>
-        Have a project in mind or a question about my services?
-        Fill out the form below and I'll get back to you.
-    </p>
-</section>
+<!-- Ambient Red Spotlight Glows (Matching Homepage, About & Services Tone) -->
+<div class="ambient-glow glow-top-right"></div>
+<div class="ambient-glow glow-center-left"></div>
+<div class="ambient-glow glow-bottom-center"></div>
 
-{% if success %}
-<p class="success-message">
-    Thank you! Your message has been received.
-</p>
-{% endif %}
+<div class="contact-container">
 
-<form method="post" class="contact-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Send Message</button>
-</form>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="contact-hero">
+        <!-- Tagline -->
+        <div class="hero-tagline animate-fade-up">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>DIRECT CHANNELS &amp; TECHNICAL COLLABORATION</span>
+        </div>
 
-<section class="contact-info">
-    <h3>Contact Information</h3>
-    <p>Email: nabil29089@gmail.com</p>
-    <p>Phone: +8801797529625</p>
-    <p>Address: Dhaka, Bangladesh</p>
-</section>
+        <!-- Main Heading -->
+        <h1 class="contact-hero-heading font-podium animate-fade-up-delay-1">
+            BUILD.<br>
+            SOMETHING.<br>
+            <span class="hero-rebuild-gold">EXCEPTIONAL.</span>
+        </h1>
+
+        <!-- Subtext -->
+        <p class="contact-hero-subtext animate-fade-up-delay-2">
+            Have an engineering challenge to solve, a web architecture to build, or a full-stack platform to ship?
+            Connect directly through the communication channels below or dispatch a message transmission.
+        </p>
+
+        <!-- Stats Row (Matching Home, Projects, Services) -->
+        <div class="hero-stats contact-stats animate-fade-up-delay-3">
+            <div class="hero-stat">
+                <div class="hero-stat-value">&lt; 24H</div>
+                <div class="hero-stat-label">AVERAGE RESPONSE</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">100%</div>
+                <div class="hero-stat-label">INQUIRY RESOLUTION</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">UTC+6</div>
+                <div class="hero-stat-label">DHAKA, BANGLADESH</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MAIN 2-COLUMN SECTION ==================== -->
+    <section class="contact-grid-section animate-fade-up-delay-3">
+        <div class="contact-grid">
+
+            <!-- LEFT COLUMN: Contact Dossier & Direct Channels -->
+            <div class="contact-dossier">
+
+                <!-- Availability Badge Card -->
+                <div class="dossier-card availability-card">
+                    <div class="status-indicator-row">
+                        <span class="live-pulse-dot">●</span>
+                        <span class="status-badge-text">STATUS: AVAILABLE FOR NEW INITIATIVES</span>
+                    </div>
+                    <p class="availability-desc">
+                        Open for full-stack engineering contracts, backend architecture consulting, high-throughput microservices, and bespoke software projects.
+                    </p>
+                </div>
+
+                <!-- Direct Communication Channels -->
+                <div class="dossier-card channels-card">
+                    <div class="card-section-label">DIRECT COMMUNICATION CHANNELS</div>
+
+                    <!-- Email Item -->
+                    <div class="channel-item">
+                        <div class="channel-icon-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="channel-info">
+                            <span class="channel-label">PRIMARY EMAIL</span>
+                            <a href="mailto:nabil29089@gmail.com" class="channel-value">nabil29089@gmail.com</a>
+                        </div>
+                        <button type="button" class="copy-btn" data-copy="nabil29089@gmail.com" title="Copy email address" aria-label="Copy email">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Phone / WhatsApp Item -->
+                    <div class="channel-item">
+                        <div class="channel-icon-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="channel-info">
+                            <span class="channel-label">PHONE &amp; WHATSAPP</span>
+                            <a href="tel:+8801797529625" class="channel-value">+880 1797-529625</a>
+                        </div>
+                        <button type="button" class="copy-btn" data-copy="+8801797529625" title="Copy phone number" aria-label="Copy phone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Location Item -->
+                    <div class="channel-item">
+                        <div class="channel-icon-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="channel-info">
+                            <span class="channel-label">BASE LOCATION</span>
+                            <span class="channel-value">Dhaka, Bangladesh</span>
+                        </div>
+                        <span class="timezone-chip">UTC+6</span>
+                    </div>
+
+                </div>
+
+                <!-- Engineering Standards & Guarantees -->
+                <div class="dossier-card standards-card">
+                    <div class="card-section-label">ENGINEERING COMMITMENT</div>
+                    <ul class="standards-list">
+                        <li>
+                            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Direct Developer Access:</strong> Direct technical consultation without intermediate agency layers.</span>
+                        </li>
+                        <li>
+                            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Strict Confidentiality:</strong> NDA protected discussions, private repos, and encrypted communications.</span>
+                        </li>
+                        <li>
+                            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Production Grade Code:</strong> Unit-tested implementations with comprehensive deployment documentation.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Vanguard Transmission Terminal / Form -->
+            <div class="contact-transmission-col">
+                <div class="vanguard-form-card">
+
+                    <!-- Card Header -->
+                    <div class="vanguard-card-header">
+                        <div class="terminal-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <span class="vanguard-form-header-title">DISPATCH TRANSMISSION</span>
+                        <span class="vanguard-status-tag">ENCRYPTED &bull; DIRECT</span>
+                    </div>
+
+                    <div class="vanguard-card-body">
+
+                        <!-- Success Alert Message Banner -->
+                        {% if success %}
+                        <div class="vanguard-success-banner" role="alert">
+                            <div class="success-icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="success-content">
+                                <h3 class="success-heading">TRANSMISSION RECEIVED SUCCESSFULLY</h3>
+                                <p class="success-subtext">
+                                    Thank you! Your message has been registered. An automated confirmation receipt has been dispatched to your email address. I will review your requirements and respond within 24 hours.
+                                </p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <p class="form-intro-note">
+                            Fill out the parameter fields below. All submissions are automatically recorded and trigger an instant email notification.
+                        </p>
+
+                        <!-- The Contact Form -->
+                        <form method="post" class="vanguard-form" novalidate>
+                            {% csrf_token %}
+
+                            <!-- Name Field -->
+                            <div class="form-group {% if form.name.errors %}has-error{% endif %}">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">
+                                    <span>YOUR NAME</span>
+                                    <span class="required-star">*</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="{{ form.name.id_for_label }}"
+                                        value="{{ form.name.value|default:'' }}"
+                                        placeholder="e.g. S.M. Nabil"
+                                        required
+                                        class="vanguard-input"
+                                        autocomplete="name"
+                                    >
+                                </div>
+                                {% if form.name.errors %}
+                                <div class="form-error-list">
+                                    {% for error in form.name.errors %}
+                                    <span class="field-error">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                        {{ error }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    <span>YOUR EMAIL ADDRESS</span>
+                                    <span class="required-star">*</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="{{ form.email.id_for_label }}"
+                                        value="{{ form.email.value|default:'' }}"
+                                        placeholder="e.g. nabil@example.com"
+                                        required
+                                        class="vanguard-input"
+                                        autocomplete="email"
+                                    >
+                                </div>
+                                {% if form.email.errors %}
+                                <div class="form-error-list">
+                                    {% for error in form.email.errors %}
+                                    <span class="field-error">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                        {{ error }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Message Field -->
+                            <div class="form-group {% if form.message.errors %}has-error{% endif %}">
+                                <label for="{{ form.message.id_for_label }}" class="form-label">
+                                    <span>PROJECT SCOPE &amp; MESSAGE</span>
+                                    <span class="required-star">*</span>
+                                </label>
+                                <div class="input-wrapper textarea-wrapper">
+                                    <svg class="input-icon textarea-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                    <textarea
+                                        name="message"
+                                        id="{{ form.message.id_for_label }}"
+                                        rows="6"
+                                        placeholder="Describe your technical requirements, goals, current tech stack, desired timeline, or inquiry details..."
+                                        required
+                                        class="vanguard-textarea"
+                                    >{{ form.message.value|default:'' }}</textarea>
+                                </div>
+                                {% if form.message.errors %}
+                                <div class="form-error-list">
+                                    {% for error in form.message.errors %}
+                                    <span class="field-error">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                        {{ error }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="vanguard-submit-btn">
+                                <span>SEND TRANSMISSION</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== PROCESS / WHAT HAPPENS NEXT ==================== -->
+    <section class="contact-process-section animate-fade-up-delay-4">
+        <div class="section-badge-row">
+            <span class="section-mini-badge">COLLABORATION PROTOCOL</span>
+            <h2 class="services-section-title font-podium">WHAT HAPPENS NEXT</h2>
+        </div>
+
+        <div class="workflow-grid">
+            <div class="workflow-card">
+                <div class="workflow-step-num">01</div>
+                <h3 class="workflow-title font-podium">TRANSMISSION INTAKE</h3>
+                <p class="workflow-desc">
+                    Your inquiry is immediately saved to the database and dual email receipts are triggered to both parties for complete auditability.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-step-num">02</div>
+                <h3 class="workflow-title font-podium">TECHNICAL EVALUATION</h3>
+                <p class="workflow-desc">
+                    I review your project requirements, API specifications, dataset architecture, or system scaling objectives within 24 hours.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-step-num">03</div>
+                <h3 class="workflow-title font-podium">MILESTONE ROADMAP</h3>
+                <p class="workflow-desc">
+                    We align on an exact technical scope, sprint milestones, performance benchmarks, and transparent commercial deliverables.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-step-num">04</div>
+                <h3 class="workflow-title font-podium">DEPLOYMENT</h3>
+                <p class="workflow-desc">
+                    Rapid development sprints begin with test-driven development, continuous git commits, Docker containerization, and production handoff.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Copy Toast Notification Widget -->
+<div id="copyToast" class="copy-toast" role="status" aria-live="polite">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="copyToastText">Copied to clipboard</span>
+</div>
+
+<!-- ==================== CLIPBOARD COPY SCRIPT ==================== -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        const toast = document.getElementById('copyToast');
+        const toastText = document.getElementById('copyToastText');
+        let toastTimeout = null;
+
+        function showToast(text) {
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastText.textContent = text;
+            toast.classList.add('show');
+            toastTimeout = setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2400);
+        }
+
+        copyButtons.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const textToCopy = this.getAttribute('data-copy');
+                if (!textToCopy) return;
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy).then(function() {
+                        showToast('Copied ' + textToCopy + ' to clipboard!');
+                    }).catch(function() {
+                        fallbackCopy(textToCopy);
+                    });
+                } else {
+                    fallbackCopy(textToCopy);
+                }
+            });
+        });
+
+        function fallbackCopy(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast('Copied ' + text + ' to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy');
+            }
+            document.body.removeChild(tempInput);
+        }
+    });
+</script>
 
 {% endblock %}

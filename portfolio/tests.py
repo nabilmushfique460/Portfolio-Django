@@ -88,6 +88,27 @@ class ProjectPagesTests(TestCase):
         self.assertIn('SELECTED.', content)
         self.assertIn('SYSTEMS.', content)
 
+    def test_services_page_renders_rich_services(self):
+        """GET /services/ renders services.html with 6 enriched service cards and images."""
+        response = self.client.get(reverse('services'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'services.html')
+        self.assertIn('services', response.context)
+        services = response.context['services']
+        self.assertEqual(len(services), 6)
+
+        # Verify first service details
+        svc = services[0]
+        self.assertEqual(svc['title'], 'Custom Full Stack Web Applications')
+        self.assertTrue(svc['image'].startswith('https://images.unsplash.com/'))
+        self.assertGreater(len(svc['deliverables']), 0)
+        self.assertGreater(len(svc['tags']), 0)
+
+        # Verify page content contains heading
+        content = response.content.decode('utf-8')
+        self.assertIn('ARCHITECTED.', content)
+        self.assertIn('SCALABLE.', content)
+
 
 
 

@@ -1,52 +1,196 @@
-{# services.html - the Services page. Only the content block is filled in. #}
+{# services.html - Engineering Services & Technical Offerings #}
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Services | S.M. Nabil Mushfique{% endblock %}
+{% block title %}Offerings & Services | S.M. Nabil Mushfique{% endblock %}
+
+{% block main_class %}services-page-wrapper{% endblock %}
 
 {% block content %}
 
-<h2 class="page-title">Services</h2>
+<!-- Ambient Red Spotlight Glows (Matching Homepage & About Page Tone) -->
+<div class="ambient-glow glow-top-right"></div>
+<div class="ambient-glow glow-center-left"></div>
+<div class="ambient-glow glow-bottom-center"></div>
 
-<div class="service-card">
-    <h3>Custom Web Application Development</h3>
-    <p>Building secure, full-stack web applications using Python with Django or Flask for backend logic, and HTML, CSS,
-        and JavaScript for the frontend.</p>
-</div>
+<div class="services-container">
 
-<div class="service-card">
-    <h3>RESTful API Development &amp; Integration</h3>
-    <p>Creating fast, scalable backend APIs and microservices using Flask or Django REST Framework to connect frontends,
-        mobile apps, or third-party platforms.</p>
-</div>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="services-hero">
+        <!-- Tagline -->
+        <div class="hero-tagline animate-fade-up">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>ENGINEERING CAPABILITIES &amp; TECHNICAL SOLUTIONS</span>
+        </div>
 
-<div class="service-card">
-    <h3>Database Design &amp; Architecture</h3>
-    <p>Modeling schemas, managing migrations, optimizing complex queries, and administering relational databases with
-        MySQL.</p>
-</div>
+        <!-- Main Heading -->
+        <h1 class="services-hero-heading font-podium animate-fade-up-delay-1">
+            ARCHITECTED.<br>
+            SCALABLE.<br>
+            PRODUCTION READY.
+        </h1>
 
-<div class="service-card">
-    <h3>Frontend UI/UX Implementation</h3>
-    <p>Crafting responsive, interactive user interfaces by structuring semantic HTML, styling with modern CSS, and
-        adding dynamic behavior via vanilla JavaScript.</p>
-</div>
+        <!-- Subtext -->
+        <p class="services-hero-subtext animate-fade-up-delay-2">
+            High-performance software engineering services designed to turn complex business logic into
+            resilient, fast, and scalable digital systems — built with Python, Django, and modern web architectures.
+        </p>
 
-<div class="service-card">
-    <h3>CMS &amp; Internal Dashboard Development</h3>
-    <p>Developing custom admin portals, content managers, and data dashboards leveraging Django's built-in admin engine
-        or custom Flask setups.</p>
-</div>
+        <!-- Stats Row -->
+        <div class="hero-stats services-stats animate-fade-up-delay-3">
+            <div class="hero-stat">
+                <div class="hero-stat-value">100%</div>
+                <div class="hero-stat-label">CLEAN ARCHITECTURE</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">99.9%</div>
+                <div class="hero-stat-label">UPTIME DRIVEN DESIGN</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">0</div>
+                <div class="hero-stat-label">TECHNICAL DEBT TOLERANCE</div>
+            </div>
+        </div>
+    </section>
 
-<div class="service-card">
-    <h3>Legacy Migration &amp; Backend Modernization</h3>
-    <p>Refactoring or porting legacy applications into maintainable Python/Django/Flask codebases with optimized MySQL
-        storage.</p>
-</div>
+    <!-- ==================== SERVICES GRID ==================== -->
+    <section class="services-grid-section">
+        <div class="section-badge-row animate-fade-up">
+            <span class="section-mini-badge">SPECIALIZED SERVICE DOMAINS</span>
+            <h2 class="services-section-title font-podium">WHAT I BUILD AND DELIVER</h2>
+        </div>
 
-<div class="service-card">
-    <h3>Maintenance &amp; Performance Optimization</h3>
-    <p>Tuning MySQL query performance, caching backend endpoints, and optimizing frontend HTML/CSS/JS assets for faster
-        page load speeds.</p>
+        <div class="services-grid">
+            {% for service in services %}
+            <article class="service-card-vanguard" id="service-{{ service.id }}">
+                <!-- Card Media Header -->
+                <div class="service-media">
+                    <img src="{{ service.image }}" alt="{{ service.title }}" loading="lazy" class="service-img">
+                    <div class="service-media-overlay"></div>
+
+                    <!-- Top Glass Chips -->
+                    <div class="service-chips-row">
+                        <span class="category-chip">{{ service.category }}</span>
+                        <span class="project-id-chip">#{{ service.id }}</span>
+                    </div>
+
+                    <!-- Badge Ribbon -->
+                    {% if service.badge %}
+                    <div class="featured-ribbon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span>{{ service.badge }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Card Body -->
+                <div class="service-body">
+                    <h3 class="service-card-title font-podium">{{ service.title }}</h3>
+                    <p class="service-card-desc">{{ service.description }}</p>
+
+                    <!-- Deliverables Checklist -->
+                    <div class="service-deliverables">
+                        <div class="deliverables-heading">CORE DELIVERABLES:</div>
+                        <ul class="deliverables-list">
+                            {% for item in service.deliverables %}
+                            <li>
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>{{ item }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Tech Stack Pills -->
+                    <div class="service-tags">
+                        {% for tag in service.tags %}
+                        <span class="tech-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Footer Action -->
+                    <div class="service-card-footer">
+                        <a href="{% url 'contact' %}" class="service-cta-btn">
+                            <span>INQUIRE ABOUT THIS SERVICE</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ==================== ENGINEERING WORKFLOW ==================== -->
+    <section class="workflow-section">
+        <div class="section-badge-row">
+            <span class="section-mini-badge">DEVELOPMENT LIFECYCLE</span>
+            <h2 class="services-section-title font-podium">HOW I DELIVER VALUE</h2>
+        </div>
+
+        <div class="workflow-grid">
+            <div class="workflow-card">
+                <div class="workflow-step-num font-podium">01</div>
+                <h4 class="workflow-title font-podium">DISCOVERY AND SPECS</h4>
+                <p class="workflow-desc">Understanding business constraints, data schemas, traffic expectations, and selecting the optimal technology stack.</p>
+            </div>
+            <div class="workflow-card">
+                <div class="workflow-step-num font-podium">02</div>
+                <h4 class="workflow-title font-podium">AGILE ENGINEERING</h4>
+                <p class="workflow-desc">Writing modular, test-driven Python and JavaScript codebases with strict separation of concerns and database efficiency.</p>
+            </div>
+            <div class="workflow-card">
+                <div class="workflow-step-num font-podium">03</div>
+                <h4 class="workflow-title font-podium">PERFORMANCE TUNING</h4>
+                <p class="workflow-desc">Comprehensive test coverage, query profiling, security auditing, and latency optimization before production rollout.</p>
+            </div>
+            <div class="workflow-card">
+                <div class="workflow-step-num font-podium">04</div>
+                <h4 class="workflow-title font-podium">DEPLOY AND SCALE</h4>
+                <p class="workflow-desc">Deploying to production with automated CI/CD workflows, structured logging, monitoring, and ongoing maintenance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BOTTOM CTA BANNER ==================== -->
+    <section class="projects-cta-banner">
+        <div class="cta-banner-content">
+            <div class="cta-banner-tag">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>ARCHITECTURE &amp; ENGINEERING</span>
+            </div>
+            <h2 class="cta-banner-heading font-podium">
+                HAVE A SYSTEM<br>IN MIND
+            </h2>
+            <p class="cta-banner-subtext">
+                Whether you need a custom Django application, automated ETL workflows, or a high-performance REST API, let's build software that drives real impact.
+            </p>
+            <div class="cta-btn-group">
+                <a href="{% url 'contact' %}" class="btn-primary cta-primary-btn">
+                    START A CONVERSATION
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </a>
+                <a href="{% url 'about' %}" class="cta-secondary-btn">
+                    VIEW REPOSITORIES
+                </a>
+            </div>
+        </div>
+    </section>
+
 </div>
 
 {% endblock %}
