@@ -1,5 +1,4 @@
-{# home.html - the Home page with fullscreen video hero. #}
-{# The header, nav, and footer come from base.html. #}
+{# home.html - the Home page with live terminal animation #}
 {% extends "base.html" %}
 {% load static %}
 
@@ -8,11 +7,12 @@
 {% block main_class %}{% endblock %}
 
 {% block hero_video %}
-<!-- Fullscreen background video -->
-<video class="video-bg" autoplay muted loop playsinline>
-    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4" type="video/mp4">
-</video>
-<div class="video-overlay"></div>
+<!-- Smooth cinematic atmospheric background (no characters) -->
+<div class="home-smooth-bg">
+    <div class="home-glow-crimson"></div>
+    <div class="home-glow-ruby"></div>
+    <div class="home-vignette-overlay"></div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -21,66 +21,85 @@
 <section class="hero">
     <div class="hero-content">
 
-        <!-- Tagline -->
-        <div class="hero-tagline animate-fade-up">
-            <!-- Crown icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/>
-                <path d="M5 21h14"/>
-            </svg>
-            <span>FULL-STACK ENGINEER</span>
-        </div>
+        <div class="hero-grid">
+            <!-- Left Column: Typography & CTAs -->
+            <div class="hero-left-col">
+                <!-- Tagline -->
+                <div class="hero-tagline animate-fade-up">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>FULL-STACK ENGINEER</span>
+                </div>
 
-        <!-- Main Heading -->
-        <h1 class="hero-heading animate-fade-up-delay-1">
-            SHIP.<br>
-            BREAK.<br>
-            REBUILD.
-        </h1>
+                <!-- Main Heading -->
+                <h1 class="hero-heading animate-fade-up-delay-1">
+                    SHIP.<br>
+                    BREAK.<br>
+                    <span class="hero-rebuild-gold">REBUILD.</span>
+                </h1>
 
-        <!-- Subtext -->
-        <p class="hero-subtext animate-fade-up-delay-2">
-           I build fast, resilient web products that hold up under
-            <strong>real traffic</strong> — not just in AI file.
-        </p>
+                <!-- Subtext -->
+                <p class="hero-subtext animate-fade-up-delay-2">
+                    I build web products that don't <strong>buckle</strong> under real traffic.
+                </p>
 
-        <!-- CTA Row -->
-        <div class="hero-cta-row animate-fade-up-delay-3">
-            <!-- Primary CTA Button -->
-            <a href="{% url 'services' %}" class="btn-primary">
-                VIEW PROJECT
-                <!-- ArrowUpRight icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-            </a>
+                <!-- CTA Row -->
+                <div class="hero-cta-row animate-fade-up-delay-3">
+                    <!-- Primary CTA Button -->
+                    <a href="{% url 'about' %}" class="btn-primary">
+                        VIEW PROJECTS
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
 
-            <!-- Award Badge (hidden on mobile) -->
-            <div class="award-badge">
-                <!-- Award icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="8" r="6"/>
-                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
-                </svg>
-                <div class="award-badge-text">
-                    PRODUCTION-TESTED CODE
+                    <!-- Award Badge -->
+                    <div class="award-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <div class="award-badge-text">
+                            PRODUCTION-TESTED CODE
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Live Terminal Window -->
+            <div class="hero-terminal-col animate-fade-up-delay-2">
+                <div class="hero-terminal-window">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <span class="terminal-title">zsh — deploy.sh</span>
+                    </div>
+                    <div class="terminal-body" id="liveTerminal">
+                        <!-- Terminal lines dynamically written by JS -->
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Divider Line -->
+        <div class="hero-stats-divider"></div>
 
         <!-- Stats Row -->
         <div class="hero-stats animate-fade-up-delay-4">
             <div class="hero-stat">
                 <div class="hero-stat-value">80+</div>
-                <div class="hero-stat-label">PROJECT SHIPPED</div>
+                <div class="hero-stat-label">PROJECTS SHIPPED</div>
             </div>
             <div class="hero-stat">
                 <div class="hero-stat-value">99.9%</div>
                 <div class="hero-stat-label">UPTIME ACROSS PROD</div>
             </div>
             <div class="hero-stat">
-                <div class="hero-stat-value">8+</div>
+                <div class="hero-stat-value">8</div>
                 <div class="hero-stat-label">YEARS IN THE TERMINAL</div>
             </div>
         </div>
@@ -92,5 +111,86 @@
     <p>Ready to start your project?</p>
     <a href="{% url 'services' %}" class="cta-link">See All Services</a>
 </section>
+
+<!-- ==================== LIVE TERMINAL SCRIPT ==================== -->
+<script>
+    (function() {
+        const terminalData = [
+            { type: 'cmd', text: '$ npm run build' },
+            { type: 'out', text: '✓ compiled in 1.4s' },
+            { type: 'cmd', text: '$ npm run test' },
+            { type: 'out', text: '✓ 142 tests passed' },
+            { type: 'cmd', text: '$ npm run deploy' },
+            { type: 'out', text: '✓ deployed to production' },
+            { type: 'cmd', text: '$ status' },
+            { type: 'live', text: '● LIVE' },
+        ];
+
+        function runTerminal() {
+            const container = document.getElementById('liveTerminal');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let lineIndex = 0;
+
+            function typeNextLine() {
+                if (lineIndex >= terminalData.length) {
+                    setTimeout(runTerminal, 4500);
+                    return;
+                }
+
+                const item = terminalData[lineIndex];
+                const lineEl = document.createElement('div');
+                lineEl.className = 'terminal-line line-' + item.type;
+
+                if (item.type === 'cmd') {
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'cmd-text';
+                    const cursorSpan = document.createElement('span');
+                    cursorSpan.className = 'terminal-cursor';
+                    cursorSpan.textContent = '▋';
+
+                    lineEl.appendChild(textSpan);
+                    lineEl.appendChild(cursorSpan);
+                    container.appendChild(lineEl);
+
+                    let charIdx = 0;
+                    const text = item.text;
+
+                    function typeChar() {
+                        if (charIdx < text.length) {
+                            textSpan.textContent += text.charAt(charIdx);
+                            charIdx++;
+                            setTimeout(typeChar, 35 + Math.random() * 25);
+                        } else {
+                            cursorSpan.remove();
+                            lineIndex++;
+                            setTimeout(typeNextLine, 280);
+                        }
+                    }
+                    typeChar();
+                } else if (item.type === 'out') {
+                    lineEl.textContent = item.text;
+                    container.appendChild(lineEl);
+                    lineIndex++;
+                    setTimeout(typeNextLine, 320);
+                } else if (item.type === 'live') {
+                    lineEl.innerHTML = '<span class="live-pulse-dot">●</span> LIVE <span class="terminal-cursor">▋</span>';
+                    container.appendChild(lineEl);
+                    lineIndex++;
+                    setTimeout(typeNextLine, 4500);
+                }
+            }
+
+            typeNextLine();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runTerminal);
+        } else {
+            runTerminal();
+        }
+    })();
+</script>
 
 {% endblock %}
