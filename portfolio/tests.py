@@ -65,4 +65,29 @@ class ContactMessageTests(TestCase):
         self.assertFormError(response.context['form'], 'email', 'Enter a valid email address.')
 
 
+class ProjectPagesTests(TestCase):
+    def test_about_page_loads_projects_from_csv(self):
+        """GET /about/ renders about.html with projects parsed from data.csv and no obsolete sections."""
+        response = self.client.get(reverse('about'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'about.html')
+        self.assertIn('projects', response.context)
+        projects = response.context['projects']
+        self.assertGreater(len(projects), 0)
+
+        # Verify first project details match data.csv
+        todo_project = next((p for p in projects if p['title'] == 'Todo App'), None)
+        self.assertIsNotNone(todo_project)
+        self.assertIn('A distraction-free web app', todo_project['description'])
+        self.assertTrue(todo_project['image'].startswith('https://images.unsplash.com/'))
+
+        # Verify old "About Me" and "My Mission" sections are deleted
+        content = response.content.decode('utf-8')
+        self.assertNotIn('<h2>About Me</h2>', content)
+        self.assertNotIn('<h2>My Mission</h2>', content)
+        self.assertIn('SELECTED.', content)
+        self.assertIn('SYSTEMS.', content)
+
+
+
 

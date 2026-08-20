@@ -1,45 +1,337 @@
-{# about.html - the About page. Only the content block is filled in. #}
+{# about.html - Projects Showcase Page #}
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}About | S.M. Nabil Mushfique{% endblock %}
+{% block title %}Projects | S.M. Nabil Mushfique{% endblock %}
+
+{% block main_class %}projects-page-wrapper{% endblock %}
 
 {% block content %}
 
-<section class="about-section">
-    <h2>About Me</h2>
-    <p>
-        I'm a full-stack web developer specializing in Python-based
-        backends (Django and Flask) paired with clean, responsive
-        frontends. I've spent my career building web applications,
-        APIs, and internal tools for businesses that need software
-        they can rely on: fast, secure, and easy to maintain.
-    </p>
-    <p>
-        Every project starts with understanding what you actually
-        need - not just what technology sounds impressive. I design
-        database schemas that make sense for your data, write APIs
-        that other systems can integrate with easily, and build
-        interfaces that your team and customers will find simple to
-        use.
-    </p>
-    <p>
-        Clients trust me because I'm transparent about timelines,
-        I write maintainable code (not just working code), and I
-        stick around after launch to handle updates, performance
-        tuning, and support.
-    </p>
-</section>
+<!-- Ambient Red Spotlight Glows (Matching Homepage Tone) -->
+<div class="ambient-glow glow-top-right"></div>
+<div class="ambient-glow glow-center-left"></div>
+<div class="ambient-glow glow-bottom-center"></div>
 
-<section class="mission-section">
-    <h2>My Mission</h2>
-    <p>
-        My goal is simple: give clients looking for web development
-        services a dependable partner who can take a project from
-        idea to production. Whether that means a brand-new
-        application, a REST API to connect your existing tools, or
-        modernizing a legacy system, I focus on solutions that are
-        secure, scalable, and built to last.
-    </p>
-</section>
+<div class="projects-container">
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="projects-hero">
+        <!-- Tagline -->
+        <div class="hero-tagline animate-fade-up">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/>
+                <path d="M5 21h14"/>
+            </svg>
+            <span>PRODUCTION PORTFOLIO &amp; SOURCE REPOSITORIES</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="projects-hero-heading font-podium animate-fade-up-delay-1">
+            SELECTED.<br>
+            SYSTEMS.<br>
+            CODEBASES.
+        </h1>
+
+        <!-- Subtext -->
+        <p class="projects-hero-subtext animate-fade-up-delay-2">
+            A comprehensive catalog of <strong>20 production-tested projects</strong> spanning full-stack Django platforms,
+            high-throughput REST microservices, automated data pipelines, computer vision systems, and desktop SQL software.
+        </p>
+
+        <!-- Stats Row (Matching Home Page) -->
+        <div class="hero-stats projects-stats animate-fade-up-delay-3">
+            <div class="hero-stat">
+                <div class="hero-stat-value">20</div>
+                <div class="hero-stat-label">PROJECTS ARCHIVED</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">6</div>
+                <div class="hero-stat-label">SPECIALIZED DOMAINS</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">100%</div>
+                <div class="hero-stat-label">PYTHON &amp; OPEN-SOURCE</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTROL TOOLBAR (SEARCH & FILTERS) ==================== -->
+    <section class="projects-controls animate-fade-up-delay-3">
+        <!-- Live Search Bar -->
+        <div class="search-box">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+                type="text"
+                id="projectSearch"
+                placeholder="Search projects by name, technology, or keywords (e.g. Django, API, SQL, OpenCV)..."
+                autocomplete="off"
+            >
+            <button id="searchClear" class="search-clear-btn" aria-label="Clear search" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="filter-pills-row">
+            <div class="filter-pills" id="filterContainer">
+                <button class="filter-pill active" data-filter="all">
+                    <span class="pill-dot"></span>
+                    <span>All Projects</span>
+                    <span class="pill-count">20</span>
+                </button>
+                <button class="filter-pill" data-filter="web">
+                    <span>Web Apps</span>
+                    <span class="pill-count">5</span>
+                </button>
+                <button class="filter-pill" data-filter="api">
+                    <span>REST APIs</span>
+                    <span class="pill-count">1</span>
+                </button>
+                <button class="filter-pill" data-filter="automation">
+                    <span>Automation</span>
+                    <span class="pill-count">3</span>
+                </button>
+                <button class="filter-pill" data-filter="ai-data">
+                    <span>AI &amp; Data</span>
+                    <span class="pill-count">4</span>
+                </button>
+                <button class="filter-pill" data-filter="analytics">
+                    <span>Analytics</span>
+                    <span class="pill-count">5</span>
+                </button>
+                <button class="filter-pill" data-filter="desktop">
+                    <span>Desktop GUI</span>
+                    <span class="pill-count">2</span>
+                </button>
+            </div>
+
+            <div class="results-counter" id="resultsCounter">
+                Showing <strong id="visibleCount">{{ projects|length }}</strong> of {{ projects|length }} projects
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROJECTS SHOWCASE GRID ==================== -->
+    <section class="projects-grid-section animate-fade-up-delay-4">
+        <div class="projects-grid" id="projectsGrid">
+            {% for project in projects %}
+            <article
+                class="project-card {% if project.featured %}is-featured{% endif %}"
+                data-category="{{ project.category_slug }}"
+                data-title="{{ project.title|lower }}"
+                data-tags="{% for tag in project.tags %}{{ tag|lower }} {% endfor %}"
+                data-desc="{{ project.description|lower }}"
+            >
+                <!-- Card Media Container -->
+                <div class="project-media">
+                    <img
+                        src="{{ project.image }}"
+                        alt="{{ project.title }} preview"
+                        class="project-img"
+                    >
+                    <div class="project-media-gradient"></div>
+
+                    <!-- Top Media Badges -->
+                    <div class="project-media-header">
+                        <span class="category-chip">
+                            <span class="chip-status-dot"></span>
+                            {{ project.category }}
+                        </span>
+                        <span class="project-index">#{{ project.id|stringformat:"02d" }}</span>
+                    </div>
+
+                    {% if project.featured %}
+                    <span class="featured-indicator">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        FEATURED BUILD
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Card Body -->
+                <div class="project-card-body">
+                    <!-- Tech Stack Tags -->
+                    <div class="tech-tags-list">
+                        {% for tag in project.tags %}
+                        <span class="tech-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Project Title -->
+                    <h2 class="project-card-title font-podium">{{ project.title }}</h2>
+
+                    <!-- Project Description -->
+                    <p class="project-card-desc">{{ project.description }}</p>
+
+                    <!-- Card Footer / Link -->
+                    <div class="project-card-footer">
+                        <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer" class="project-cta-btn" aria-label="View source code for {{ project.title }}">
+                            <span>VIEW REPOSITORY</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="empty-state">
+                <p>No projects currently available.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- No Search Results Found Message -->
+        <div id="noResultsState" class="no-results-box" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <h3>No matching projects found</h3>
+            <p>Try adjusting your search keywords or switching category filters.</p>
+            <button id="resetFiltersBtn" class="reset-filter-btn">Clear All Filters</button>
+        </div>
+    </section>
+
+    <!-- ==================== BOTTOM CTA BANNER (MATCHING HOMEPAGE) ==================== -->
+    <section class="projects-cta-banner animate-fade-up">
+        <div class="cta-banner-content">
+            <div class="hero-tagline cta-tagline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="6"/>
+                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                </svg>
+                <span>ARCHITECTURE &amp; ENGINEERING</span>
+            </div>
+
+            <h2 class="cta-banner-heading font-podium">
+                HAVE A PROJECT<br>
+                IN MIND?
+            </h2>
+
+            <p class="cta-banner-text">
+                Whether you need a custom Django application, automated ETL workflows, or a high-performance REST API,
+                let's build robust software that drives real impact.
+            </p>
+
+            <div class="cta-btn-group">
+                <a href="{% url 'contact' %}" class="btn-primary cta-primary-btn">
+                    START A CONVERSATION
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </a>
+                <a href="{% url 'services' %}" class="nav-cta cta-secondary-btn">
+                    VIEW SERVICES OFFERINGS
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- ==================== INTERACTIVE FILTER & SEARCH LOGIC ==================== -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('projectSearch');
+        const searchClear = document.getElementById('searchClear');
+        const filterPills = document.querySelectorAll('.filter-pill');
+        const projectCards = document.querySelectorAll('.project-card');
+        const visibleCountEl = document.getElementById('visibleCount');
+        const noResultsState = document.getElementById('noResultsState');
+        const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        function applyFilters() {
+            let visibleCount = 0;
+
+            projectCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                const title = card.getAttribute('data-title') || '';
+                const tags = card.getAttribute('data-tags') || '';
+                const desc = card.getAttribute('data-desc') || '';
+
+                const matchesCategory = (currentFilter === 'all' || category === currentFilter);
+                const matchesSearch = !searchQuery ||
+                    title.includes(searchQuery) ||
+                    tags.includes(searchQuery) ||
+                    desc.includes(searchQuery);
+
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'flex';
+                    card.classList.remove('card-hidden');
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                    card.classList.add('card-hidden');
+                }
+            });
+
+            visibleCountEl.textContent = visibleCount;
+
+            if (visibleCount === 0) {
+                noResultsState.style.display = 'block';
+            } else {
+                noResultsState.style.display = 'none';
+            }
+        }
+
+        // Category filter click handler
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                filterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                currentFilter = pill.getAttribute('data-filter');
+                applyFilters();
+            });
+        });
+
+        // Search input handler
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            searchClear.style.display = searchQuery ? 'flex' : 'none';
+            applyFilters();
+        });
+
+        // Search clear button
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            searchClear.style.display = 'none';
+            searchInput.focus();
+            applyFilters();
+        });
+
+        // Reset all filters button in empty state
+        if (resetFiltersBtn) {
+            resetFiltersBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                searchClear.style.display = 'none';
+
+                filterPills.forEach(p => p.classList.remove('active'));
+                const allPill = document.querySelector('.filter-pill[data-filter="all"]');
+                if (allPill) allPill.classList.add('active');
+                currentFilter = 'all';
+
+                applyFilters();
+            });
+        }
+    });
+</script>
 
 {% endblock %}
