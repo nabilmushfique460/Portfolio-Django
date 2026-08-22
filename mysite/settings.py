@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-hlvuxkc==-13i3#p!mo9suemzt9hoaqt7s7at)zk+d&q-naac0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'nabil29089.pythonanywhere.com', '*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'nabil371.pythonanywhere.com', 'nabil29089.pythonanywhere.com', '.pythonanywhere.com', '*']
 
 
 # Application definition
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,7 +126,7 @@ USE_TZ = True
 
 # The URL prefix used in templates, e.g. {% static "css/style.css" %}
 # becomes "/static/css/style.css".
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # STATICFILES_DIRS is for EXTRA static folders that live outside of
