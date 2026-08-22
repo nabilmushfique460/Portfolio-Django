@@ -37,7 +37,7 @@ bar, and footer only need to be written once, here.
         <!-- Desktop Nav Links (hidden below md) -->
         <nav class="main-nav">
             <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">Project</a>
+            <a href="{% url 'about' %}">Projects</a>
             <a href="{% url 'services' %}">Offerings</a>
             <a href="{% url 'contact' %}">Contact</a>
         </nav>
@@ -73,8 +73,8 @@ bar, and footer only need to be written once, here.
             </button>
         </div>
         <div class="mobile-menu-body">
-            <a href="{% url 'home' %}" class="mobile-menu-link" style="transition-delay: 100ms;" onclick="closeMenu()">Projects</a>
-            <a href="{% url 'about' %}" class="mobile-menu-link" style="transition-delay: 180ms;" onclick="closeMenu()">Studio</a>
+            <a href="{% url 'home' %}" class="mobile-menu-link" style="transition-delay: 100ms;" onclick="closeMenu()">Home</a>
+            <a href="{% url 'about' %}" class="mobile-menu-link" style="transition-delay: 180ms;" onclick="closeMenu()">Project</a>
             <a href="{% url 'services' %}" class="mobile-menu-link" style="transition-delay: 260ms;" onclick="closeMenu()">Offerings</a>
             <a href="{% url 'contact' %}" class="mobile-menu-link" style="transition-delay: 340ms;" onclick="closeMenu()">Inquire</a>
             <a href="{% url 'contact' %}" class="mobile-menu-cta" style="transition-delay: 420ms;" onclick="closeMenu()">
