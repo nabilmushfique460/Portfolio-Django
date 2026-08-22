@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    image: portfolio-django:latest
+    container_name: portfolio-django-app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
