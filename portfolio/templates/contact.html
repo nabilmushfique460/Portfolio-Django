@@ -199,7 +199,7 @@
                         </p>
 
                         <!-- The Contact Form -->
-                        <form method="post" class="vanguard-form" novalidate>
+                        <form method="post" id="contactForm" class="vanguard-form" novalidate>
                             {% csrf_token %}
 
                             <!-- Name Field -->
@@ -314,9 +314,9 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="vanguard-submit-btn">
-                                <span>SEND TRANSMISSION</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <button type="submit" id="submitBtn" class="vanguard-submit-btn">
+                                <span class="btn-text">SEND TRANSMISSION</span>
+                                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="22" y1="2" x2="11" y2="13"></line>
                                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                                 </svg>
@@ -429,6 +429,33 @@
                 showToast('Failed to copy');
             }
             document.body.removeChild(tempInput);
+        }
+        // Form submission handling to prevent multiple clicks and duplicate emails
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        let isSubmitting = false;
+
+        if (contactForm && submitBtn) {
+            contactForm.addEventListener('submit', function(e) {
+                if (isSubmitting) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Check HTML5 validity
+                if (!contactForm.checkValidity()) {
+                    return; // Let native validation display errors if any
+                }
+
+                isSubmitting = true;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+
+                const btnText = submitBtn.querySelector('.btn-text');
+                if (btnText) {
+                    btnText.textContent = 'TRANSMITTING...';
+                }
+            });
         }
     });
 </script>

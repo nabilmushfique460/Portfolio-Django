@@ -2338,6 +2338,28 @@ a.channel-value:hover {
     transform: translate(3px, -2px);
 }
 
+.vanguard-submit-btn:disabled,
+.vanguard-submit-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    pointer-events: none;
+}
+
+.vanguard-submit-btn.loading .btn-icon {
+    animation: vanguardBtnSpin 1s linear infinite;
+}
+
+@keyframes vanguardBtnSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* ---------- Legacy / Base Contact Fallback Styles ---------- */
 .contact-intro,
 .contact-info {

@@ -1,10 +1,13 @@
 import csv
+from datetime import timedelta
 import logging
 from pathlib import Path
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import get_connection, EmailMessage
 from django.shortcuts import render
+from django.utils import timezone
 from .forms import ContactForm
+from .models import ContactMessage
 
 logger = logging.getLogger(__name__)
 
@@ -346,54 +349,73 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            contact_message = form.save()
-
-            # Email details
-            name = contact_message.name
-            email = contact_message.email
-            message = contact_message.message
+            name = form.cleaned_data['name'].strip()
+            email = form.cleaned_data['email'].strip()
+            message = form.cleaned_data['message'].strip()
             admin_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'nabil29089@gmail.com')
 
-            # 1. Confirmation email to the person submitting the form
-            user_subject = "Thank you for getting in touch!"
-            user_body = (
-                f"Hi {name},\n\n"
-                f"Thank you for contacting me. I have received your message and will get back to you as soon as possible.\n\n"
-                f"Your Submitted Message:\n"
-                f"{message}\n\n"
-                f"Best regards,\n"
-                f"S.M. Nabil Mushfique"
-            )
+            # Prevent duplicate submissions if user submits again within 15 seconds
+            recent_threshold = timezone.now() - timedelta(seconds=15)
+            recent_duplicate = ContactMessage.objects.filter(
+                name=name,
+                email=email,
+                message=message,
+                created_at__gte=recent_threshold,
+            ).first()
 
-            # 2. Notification email to the admin with all details (Name, Email, Message)
-            admin_subject = f"New Contact Message from {name}"
-            admin_body = (
-                f"You have received a new contact form submission on your website:\n\n"
-                f"Name: {name}\n"
-                f"Email: {email}\n\n"
-                f"Message:\n"
-                f"{message}\n"
-            )
+            if not recent_duplicate:
+                contact_message = form.save()
 
-            try:
-                # Send confirmation email to user
-                send_mail(
-                    subject=user_subject,
-                    message=user_body,
-                    from_email=admin_email,
-                    recipient_list=[email],
-                    fail_silently=False,
+                # 1. Confirmation email to the person submitting the form
+                user_subject = "Thank you for getting in touch!"
+                user_body = (
+                    f"Hi {name},\n\n"
+                    f"Thank you for contacting me. I have received your message and will get back to you as soon as possible.\n\n"
+                    f"Your Submitted Message:\n"
+                    f"{message}\n\n"
+                    f"Best regards,\n"
+                    f"S.M. Nabil Mushfique"
                 )
-                # Send notification email to admin
-                send_mail(
-                    subject=admin_subject,
-                    message=admin_body,
-                    from_email=admin_email,
-                    recipient_list=[admin_email],
-                    fail_silently=False,
+
+                # 2. Notification email to the admin with all details (Name, Email, Message)
+                admin_subject = f"New Contact Message from {name}"
+                admin_body = (
+                    f"You have received a new contact form submission on your website:\n\n"
+                    f"Name: {name}\n"
+                    f"Email: {email}\n\n"
+                    f"Message:\n"
+                    f"{message}\n"
                 )
-            except Exception as e:
-                logger.error("Failed to send contact email: %s", e)
+
+                try:
+                    connection = get_connection()
+                    email_messages = []
+
+                    # Send confirmation email to user only if user email is not the admin email
+                    if email.lower() != admin_email.lower():
+                        user_mail = EmailMessage(
+                            subject=user_subject,
+                            body=user_body,
+                            from_email=admin_email,
+                            to=[email],
+                            connection=connection,
+                        )
+                        email_messages.append(user_mail)
+
+                    # Send notification email to admin
+                    admin_mail = EmailMessage(
+                        subject=admin_subject,
+                        body=admin_body,
+                        from_email=admin_email,
+                        to=[admin_email],
+                        connection=connection,
+                    )
+                    email_messages.append(admin_mail)
+
+                    # Dispatch all messages efficiently over a single SMTP connection
+                    connection.send_messages(email_messages)
+                except Exception as e:
+                    logger.error("Failed to send contact email: %s", e)
 
             success = True
             form = ContactForm()  # reset to a blank form after success
