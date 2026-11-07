@@ -1,320 +1,11 @@
-import csv
-from datetime import timedelta
 import logging
-from pathlib import Path
 from django.conf import settings
-from django.core.mail import get_connection, EmailMessage
+from django.core.mail import send_mail
 from django.shortcuts import render
-from django.utils import timezone
 from .forms import ContactForm
-from .models import ContactMessage
+from .models import Project, Service
 
 logger = logging.getLogger(__name__)
-
-# Curated free Unsplash images and category metadata for data.csv projects
-PROJECT_METADATA = {
-    "1.png": {
-        "image_url": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1200&q=80",
-        "category": "Web Application",
-        "category_slug": "web",
-        "badge": "Django & Python",
-        "tags": ["Django", "Python", "Full-Stack", "Task Flow"],
-        "featured": True,
-    },
-    "2.png": {
-        "image_url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-        "category": "Web Application",
-        "category_slug": "web",
-        "badge": "Full-Stack Python",
-        "tags": ["Python", "Vanilla JS", "Responsive UI"],
-        "featured": False,
-    },
-    "3.png": {
-        "image_url": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1200&q=80",
-        "category": "Automation",
-        "category_slug": "automation",
-        "badge": "PDF Automation",
-        "tags": ["Python", "PDF Generator", "Document Engine"],
-        "featured": False,
-    },
-    "4.png": {
-        "image_url": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
-        "category": "Automation",
-        "category_slug": "automation",
-        "badge": "Excel & PDF Engine",
-        "tags": ["OpenPyXL", "PDF Toolkit", "ETL Process"],
-        "featured": False,
-    },
-    "5.png": {
-        "image_url": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80",
-        "category": "AI & Data",
-        "category_slug": "ai-data",
-        "badge": "Sentiment NLP",
-        "tags": ["NLP Engine", "News API", "Sentiment AI"],
-        "featured": False,
-    },
-    "6.png": {
-        "image_url": "https://images.unsplash.com/photo-1592210454359-9043f067919b?auto=format&fit=crop&w=1200&q=80",
-        "category": "REST API",
-        "category_slug": "api",
-        "badge": "Flask Microservice",
-        "tags": ["Flask", "RESTful API", "JSON Feed"],
-        "featured": False,
-    },
-    "7.png": {
-        "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
-        "category": "Web Application",
-        "category_slug": "web",
-        "badge": "Booking Engine",
-        "tags": ["Python", "Booking Architecture", "UX Flow"],
-        "featured": True,
-    },
-    "8.png": {
-        "image_url": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80",
-        "category": "Automation",
-        "category_slug": "automation",
-        "badge": "Web Scraping",
-        "tags": ["BeautifulSoup", "SMTP Mailer", "Event Monitor"],
-        "featured": False,
-    },
-    "9.png": {
-        "image_url": "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1200&q=80",
-        "category": "AI & Data",
-        "category_slug": "ai-data",
-        "badge": "Domain Assistant",
-        "tags": ["Knowledge Base", "AI Agent", "NLP Queries"],
-        "featured": False,
-    },
-    "10.png": {
-        "image_url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
-        "category": "AI & Data",
-        "category_slug": "ai-data",
-        "badge": "Conversational AI",
-        "tags": ["Facebook API", "NLP Engine", "Chat Gateway"],
-        "featured": False,
-    },
-    "11.png": {
-        "image_url": "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1200&q=80",
-        "category": "AI & Data",
-        "category_slug": "ai-data",
-        "badge": "Computer Vision",
-        "tags": ["OpenCV", "Motion Detection", "Email Trigger"],
-        "featured": False,
-    },
-    "12.png": {
-        "image_url": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1200&q=80",
-        "category": "Analytics",
-        "category_slug": "analytics",
-        "badge": "Keystroke Analytics",
-        "tags": ["Keyboard Hook", "Word Analytics", "Stats Daemon"],
-        "featured": False,
-    },
-    "13.png": {
-        "image_url": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1200&q=80",
-        "category": "Analytics",
-        "category_slug": "analytics",
-        "badge": "Network Telemetry",
-        "tags": ["Network Telemetry", "Real-Time Graph", "Web Plotter"],
-        "featured": False,
-    },
-    "14.png": {
-        "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
-        "category": "Analytics",
-        "category_slug": "analytics",
-        "badge": "Monitoring Daemon",
-        "tags": ["Remote Server", "Cron Monitor", "Health Check"],
-        "featured": False,
-    },
-    "15.png": {
-        "image_url": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
-        "category": "Analytics",
-        "category_slug": "analytics",
-        "badge": "Data Visualization",
-        "tags": ["Matplotlib", "Data Pipeline", "Visual Analytics"],
-        "featured": False,
-    },
-    "16.png": {
-        "image_url": "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1200&q=80",
-        "category": "Analytics",
-        "category_slug": "analytics",
-        "badge": "Weather Dashboard",
-        "tags": ["5-Day Forecast", "Data Charts", "API Client"],
-        "featured": False,
-    },
-    "17.png": {
-        "image_url": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",
-        "category": "Desktop GUI",
-        "category_slug": "desktop",
-        "badge": "PyQt6 & SQL",
-        "tags": ["PyQt6 Desktop", "SQLite DB", "Admin Dashboard"],
-        "featured": False,
-    },
-    "18.png": {
-        "image_url": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
-        "category": "Desktop GUI",
-        "category_slug": "desktop",
-        "badge": "PyQt6 & SQL",
-        "tags": ["PyQt6 Desktop", "Relational SQL", "Academic Ops"],
-        "featured": False,
-    },
-    "19.png": {
-        "image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
-        "category": "Web Application",
-        "category_slug": "web",
-        "badge": "Django Web App",
-        "tags": ["Django", "Real-Time Menu", "Dynamic Filters"],
-        "featured": True,
-    },
-    "20.png": {
-        "image_url": "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80",
-        "category": "Web Application",
-        "category_slug": "web",
-        "badge": "Django E-Commerce",
-        "tags": ["Django E-Commerce", "Order Processing", "Seller Portal"],
-        "featured": True,
-    },
-}
-
-
-def load_projects_from_csv():
-    """Reads projects from data.csv and attaches rich metadata and free image URLs."""
-    csv_path = settings.BASE_DIR / 'data.csv'
-    projects = []
-    fallback_image = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
-
-    if not csv_path.exists():
-        return projects
-
-    try:
-        with open(csv_path, mode='r', encoding='utf-8') as f:
-            reader = csv.DictReader(f, delimiter=';')
-            for index, row in enumerate(reader, start=1):
-                img_key = row.get('image', f'{index}.png').strip()
-                meta = PROJECT_METADATA.get(img_key, {})
-                img_url = meta.get('image_url', fallback_image)
-                category = meta.get('category', 'Software')
-                category_slug = meta.get('category_slug', 'all')
-                badge = meta.get('badge', 'Python')
-                tags = meta.get('tags', ['Python', category])
-                featured = meta.get('featured', False)
-
-                raw_url = row.get('url', '').strip()
-                # Clean up repo link if it had a placeholder suffix
-                if raw_url.endswith('.png'):
-                    repo_url = 'https://github.com/nabilmushfique460'
-                else:
-                    repo_url = raw_url
-
-                projects.append({
-                    'id': index,
-                    'title': row.get('title', '').strip(),
-                    'description': row.get('description', '').strip(),
-                    'url': repo_url,
-                    'image': img_url,
-                    'category': category,
-                    'category_slug': category_slug,
-                    'badge': badge,
-                    'tags': tags,
-                    'featured': featured,
-                })
-    except Exception as e:
-        logger.error("Error reading data.csv: %s", e)
-
-    return projects
-
-
-SERVICES_DATA = [
-    {
-        'id': '01',
-        'title': 'Custom Full Stack Web Applications',
-        'category': 'FULL STACK ARCHITECTURE',
-        'description': 'End-to-end bespoke web platforms architected with Django, Python, and modern responsive frontends. Built with domain-driven design, robust ORM modeling, role-based access control (RBAC), secure authentication flows, and high-performance server-side rendering.',
-        'deliverables': [
-            'Modular Django / Flask Core Engine',
-            'Dynamic Responsive UI with Vanilla JS',
-            'Role-Based Permissions & Auth Systems',
-            'Unit & Integration Test Coverage'
-        ],
-        'tags': ['Django', 'Python', 'HTML5 / CSS3', 'JavaScript', 'SQLite / MySQL'],
-        'image': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80',
-        'badge': 'FLAGSHIP OFFERING',
-    },
-    {
-        'id': '02',
-        'title': 'High Throughput REST APIs and Microservices',
-        'category': 'BACKEND AND MICROSERVICES',
-        'description': 'Stateless, scalable RESTful API backends and webhook microservices built with Django REST Framework and Flask. Engineered for low-latency JSON delivery, granular token authentication (JWT / Bearer), rate-limiting, and comprehensive Swagger/OpenAPI interactive documentation.',
-        'deliverables': [
-            'Stateless REST Microservice Endpoints',
-            'JWT & Token-Based Authentication',
-            'Automated OpenAPI / Swagger Interactive Docs',
-            'Rate Limiting, Throttling & Caching'
-        ],
-        'tags': ['Django REST Framework', 'Flask', 'JSON API', 'Redis Caching', 'Postman'],
-        'image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
-        'badge': 'MICROSERVICES',
-    },
-    {
-        'id': '03',
-        'title': 'Relational Database Architecture and Query Tuning',
-        'category': 'DATABASE AND STORAGE',
-        'description': 'High-integrity relational schema design, 3NF normalization, index optimization, and transaction management. Specialized in tuning slow database queries, eliminating N+1 ORM bottlenecks, managing non-destructive migrations, and ensuring ACID consistency.',
-        'deliverables': [
-            'Normalized Relational Schema Architecture',
-            'Index Optimization & Query Profiling',
-            'ACID Transactions & Row-Level Locking',
-            'Non-Destructive Migration Scripts'
-        ],
-        'tags': ['MySQL', 'PostgreSQL', 'SQLite', 'Django ORM', 'SQL Profiling'],
-        'image': 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=1200&q=80',
-        'badge': 'DATA INTEGRITY',
-    },
-    {
-        'id': '04',
-        'title': 'Automated Data Pipelines and Web Scraping',
-        'category': 'DATA EXTRACTION AND ETL',
-        'description': 'Automated data harvesting, cleansing, transformation, and ingestion pipelines. Built with BeautifulSoup, Selenium, and background scheduling to reliably extract unstructured web data, parse dynamic JavaScript pages, validate schemas, and sync cleanly into production databases.',
-        'deliverables': [
-            'Headless Multi-Threaded Scraping Engines',
-            'Anti-Bot Handling & Proxy Support',
-            'Schema Validation & ETL Normalization',
-            'Automated Scheduled Execution'
-        ],
-        'tags': ['Python', 'BeautifulSoup', 'Selenium', 'Pandas ETL', 'Cron Automation'],
-        'image': 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
-        'badge': 'AUTOMATION',
-    },
-    {
-        'id': '05',
-        'title': 'Computer Vision and Intelligent Image Systems',
-        'category': 'COMPUTER VISION AND AI',
-        'description': 'Real-time video stream processing, motion detection, contour analysis, and automated image transformation pipelines using OpenCV and NumPy. Developing computer vision tools that integrate seamlessly with web services and standalone automated workflows.',
-        'deliverables': [
-            'Live Webcam Frame Analysis & Motion Tracking',
-            'Contour Detection & Visual Filtering',
-            'Automated Batch Image Processing',
-            'Matplotlib & OpenCV Stream Integration'
-        ],
-        'tags': ['OpenCV', 'Python', 'NumPy', 'Computer Vision', 'Matplotlib'],
-        'image': 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=1200&q=80',
-        'badge': 'VISION AND AI',
-    },
-    {
-        'id': '06',
-        'title': 'Cross Platform Desktop GUI and Enterprise Tools',
-        'category': 'DESKTOP APPLICATIONS',
-        'description': 'Native graphical user interface desktop applications built with PyQt6 / PySide. Tailored for administrative dashboards, offline database tools, school and student management portals, automated PDF invoice generation, and custom internal enterprise software.',
-        'deliverables': [
-            'Native Cross-Platform GUI (Windows / macOS / Linux)',
-            'Embedded SQLite Local Database Support',
-            'Automated PDF & Excel Export Engines',
-            'Standalone Executable Packaging'
-        ],
-        'tags': ['PyQt6', 'Python', 'Qt Designer', 'ReportLab PDF', 'SQLite'],
-        'image': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-        'badge': 'DESKTOP SUITE',
-    },
-]
 
 
 def home(request):
@@ -323,14 +14,56 @@ def home(request):
 
 
 def about(request):
-    """Show the Projects (About) page."""
-    projects = load_projects_from_csv()
-    return render(request, 'about.html', {'projects': projects})
+    """Show the Projects (About) page — data is pulled from the database."""
+    projects = Project.objects.all()
+
+    # Build template-friendly dicts that match what about.html expects.
+    project_list = []
+    for idx, p in enumerate(projects, start=1):
+        project_list.append({
+            'id': idx,
+            'title': p.title,
+            'description': p.description,
+            'url': p.url,
+            'image': p.display_image,
+            'category': p.category,
+            'category_slug': p.category_slug,
+            'badge': p.badge,
+            'tags': p.tags_list,
+            'featured': p.featured,
+        })
+
+    # Build dynamic category counts for the filter pills.
+    categories = {}
+    for proj in project_list:
+        slug = proj['category_slug']
+        categories[slug] = categories.get(slug, 0) + 1
+
+    return render(request, 'about.html', {
+        'projects': project_list,
+        'categories': categories,
+        'total_count': len(project_list),
+    })
 
 
 def services(request):
-    """Show the Services / Offerings page."""
-    return render(request, 'services.html', {'services': SERVICES_DATA})
+    """Show the Services / Offerings page — data is pulled from the database."""
+    service_qs = Service.objects.all()
+
+    service_list = []
+    for idx, s in enumerate(service_qs, start=1):
+        service_list.append({
+            'id': f'{idx:02d}',
+            'title': s.title,
+            'category': s.category,
+            'description': s.description,
+            'deliverables': s.deliverables_list,
+            'tags': s.tags_list,
+            'image': s.display_image,
+            'badge': s.badge,
+        })
+
+    return render(request, 'services.html', {'services': service_list})
 
 
 def contact(request):
@@ -349,73 +82,55 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name'].strip()
-            email = form.cleaned_data['email'].strip()
-            message = form.cleaned_data['message'].strip()
-            admin_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'nabil29089@gmail.com')
+            contact_message = form.save()
 
-            # Prevent duplicate submissions if user submits again within 15 seconds
-            recent_threshold = timezone.now() - timedelta(seconds=15)
-            recent_duplicate = ContactMessage.objects.filter(
-                name=name,
-                email=email,
-                message=message,
-                created_at__gte=recent_threshold,
-            ).first()
+            # Email details
+            name = contact_message.name
+            email = contact_message.email
+            message = contact_message.message
+            default_from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'nabil29089@gmail.com')
+            admin_email = getattr(settings, 'ADMIN_EMAIL', default_from_email)
 
-            if not recent_duplicate:
-                contact_message = form.save()
+            # 1. Confirmation email to the person submitting the form
+            user_subject = "Thank you for getting in touch!"
+            user_body = (
+                f"Hi {name},\n\n"
+                f"Thank you for contacting me. I have received your message and will get back to you as soon as possible.\n\n"
+                f"Your Submitted Message:\n"
+                f"{message}\n\n"
+                f"Best regards,\n"
+                f"S.M. Nabil Mushfique"
+            )
 
-                # 1. Confirmation email to the person submitting the form
-                user_subject = "Thank you for getting in touch!"
-                user_body = (
-                    f"Hi {name},\n\n"
-                    f"Thank you for contacting me. I have received your message and will get back to you as soon as possible.\n\n"
-                    f"Your Submitted Message:\n"
-                    f"{message}\n\n"
-                    f"Best regards,\n"
-                    f"S.M. Nabil Mushfique"
+            # 2. Notification email to the admin with all details (Name, Email, Message)
+            admin_subject = f"New Contact Message from {name}"
+            admin_body = (
+                f"You have received a new contact form submission on your website:\n\n"
+                f"Name: {name}\n"
+                f"Email: {email}\n\n"
+                f"Message:\n"
+                f"{message}\n"
+            )
+
+            try:
+                # Send confirmation email to user
+                send_mail(
+                    subject=user_subject,
+                    message=user_body,
+                    from_email=default_from_email,
+                    recipient_list=[email],
+                    fail_silently=False,
                 )
-
-                # 2. Notification email to the admin with all details (Name, Email, Message)
-                admin_subject = f"New Contact Message from {name}"
-                admin_body = (
-                    f"You have received a new contact form submission on your website:\n\n"
-                    f"Name: {name}\n"
-                    f"Email: {email}\n\n"
-                    f"Message:\n"
-                    f"{message}\n"
+                # Send notification email to admin
+                send_mail(
+                    subject=admin_subject,
+                    message=admin_body,
+                    from_email=default_from_email,
+                    recipient_list=[admin_email],
+                    fail_silently=False,
                 )
-
-                try:
-                    connection = get_connection()
-                    email_messages = []
-
-                    # Send confirmation email to user only if user email is not the admin email
-                    if email.lower() != admin_email.lower():
-                        user_mail = EmailMessage(
-                            subject=user_subject,
-                            body=user_body,
-                            from_email=admin_email,
-                            to=[email],
-                            connection=connection,
-                        )
-                        email_messages.append(user_mail)
-
-                    # Send notification email to admin
-                    admin_mail = EmailMessage(
-                        subject=admin_subject,
-                        body=admin_body,
-                        from_email=admin_email,
-                        to=[admin_email],
-                        connection=connection,
-                    )
-                    email_messages.append(admin_mail)
-
-                    # Dispatch all messages efficiently over a single SMTP connection
-                    connection.send_messages(email_messages)
-                except Exception as e:
-                    logger.error("Failed to send contact email: %s", e)
+            except Exception as e:
+                logger.error("Failed to send contact email: %s", e)
 
             success = True
             form = ContactForm()  # reset to a blank form after success
@@ -427,5 +142,3 @@ def contact(request):
         'success': success,
     }
     return render(request, 'contact.html', context)
-
-

@@ -7,6 +7,8 @@ hands off ("includes") all normal site traffic to the portfolio app's
 own urls.py, and keeps the built-in Django admin site available at
 /admin/.
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -18,3 +20,7 @@ urlpatterns = [
     # handled by portfolio/urls.py.
     path('', include('portfolio.urls')),
 ]
+
+# Serve user-uploaded media files in development.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

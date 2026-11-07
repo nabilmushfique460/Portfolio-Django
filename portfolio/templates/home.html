@@ -116,12 +116,12 @@
 <script>
     (function() {
         const terminalData = [
-            { type: 'cmd', text: '$ npm run build' },
-            { type: 'out', text: '✓ compiled in 1.4s' },
-            { type: 'cmd', text: '$ npm run test' },
-            { type: 'out', text: '✓ 142 tests passed' },
-            { type: 'cmd', text: '$ npm run deploy' },
-            { type: 'out', text: '✓ deployed to production' },
+            { type: 'cmd', text: '$ python manage.py check' },
+            { type: 'out', text: '✓ 0 issues identified (Django 5.2)' },
+            { type: 'cmd', text: '$ pytest -v --tb=short' },
+            { type: 'out', text: '✓ 142 passed in 1.14s' },
+            { type: 'cmd', text: '$ docker compose up -d' },
+            { type: 'out', text: '✓ containers healthy & deployed' },
             { type: 'cmd', text: '$ status' },
             { type: 'live', text: '● LIVE' },
         ];

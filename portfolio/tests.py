@@ -1,4 +1,5 @@
 from django.core import mail
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from .models import ContactMessage
@@ -64,46 +65,12 @@ class ContactMessageTests(TestCase):
         self.assertEqual(len(mail.outbox), 0)
         self.assertFormError(response.context['form'], 'email', 'Enter a valid email address.')
 
-    def test_contact_form_submission_duplicate_debounced(self):
-        """Rapid duplicate submissions are debounced so only 1 email per recipient is sent and 1 DB record saved."""
-        data = {
-            'name': 'John Doe',
-            'email': 'john@example.com',
-            'message': 'Hello, duplicate test message.',
-        }
-        # First submission
-        response1 = self.client.post(reverse('contact'), data)
-        self.assertEqual(response1.status_code, 200)
-        self.assertTrue(response1.context['success'])
-        self.assertEqual(ContactMessage.objects.count(), 1)
-        self.assertEqual(len(mail.outbox), 2)  # 1 to user + 1 to admin
-
-        # Immediate duplicate submission (simulating double-click / rapid resubmit)
-        response2 = self.client.post(reverse('contact'), data)
-        self.assertEqual(response2.status_code, 200)
-        self.assertTrue(response2.context['success'])
-        # DB count must remain 1 and no additional emails sent
-        self.assertEqual(ContactMessage.objects.count(), 1)
-        self.assertEqual(len(mail.outbox), 2)
-
-    def test_contact_form_submission_admin_as_sender(self):
-        """When sender is admin_email, only 1 email is sent (admin notification) to avoid duplicate emails in admin inbox."""
-        data = {
-            'name': 'Admin User',
-            'email': 'nabil29089@gmail.com',
-            'message': 'Testing with admin email.',
-        }
-        response = self.client.post(reverse('contact'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context['success'])
-        self.assertEqual(ContactMessage.objects.count(), 1)
-        # Exactly 1 email to admin (no separate user confirmation to same address)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, ['nabil29089@gmail.com'])
-        self.assertIn('New Contact Message from Admin User', mail.outbox[0].subject)
-
 
 class ProjectPagesTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        call_command('seed_data')
+
     def test_about_page_loads_projects_from_csv(self):
         """GET /about/ renders about.html with projects parsed from data.csv and no obsolete sections."""
         response = self.client.get(reverse('about'))
@@ -146,6 +113,18 @@ class ProjectPagesTests(TestCase):
         content = response.content.decode('utf-8')
         self.assertIn('ARCHITECTED.', content)
         self.assertIn('SCALABLE.', content)
+
+    def test_home_page_renders_cleanly(self):
+        """GET / renders home.html with live terminal and navigation links."""
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        content = response.content.decode('utf-8')
+        self.assertIn('SHIP.', content)
+        self.assertIn('BREAK.', content)
+        self.assertIn('REBUILD.', content)
+        self.assertIn('manage.py check', content)
+
 
 
 

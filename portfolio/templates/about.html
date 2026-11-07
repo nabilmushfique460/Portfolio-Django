@@ -35,18 +35,18 @@
 
         <!-- Subtext -->
         <p class="projects-hero-subtext animate-fade-up-delay-2">
-            A comprehensive catalog of <strong>20 production-tested projects</strong> spanning full-stack Django platforms,
+            A comprehensive catalog of <strong>{{ total_count }} production-tested projects</strong> spanning full-stack Django platforms,
             high-throughput REST microservices, automated data pipelines, computer vision systems, and desktop SQL software.
         </p>
 
         <!-- Stats Row (Matching Home Page) -->
         <div class="hero-stats projects-stats animate-fade-up-delay-3">
             <div class="hero-stat">
-                <div class="hero-stat-value">20</div>
+                <div class="hero-stat-value">{{ total_count }}</div>
                 <div class="hero-stat-label">PROJECTS ARCHIVED</div>
             </div>
             <div class="hero-stat">
-                <div class="hero-stat-value">6</div>
+                <div class="hero-stat-value">{{ categories|length }}</div>
                 <div class="hero-stat-label">SPECIALIZED DOMAINS</div>
             </div>
             <div class="hero-stat">
@@ -78,38 +78,20 @@
             </button>
         </div>
 
-        <!-- Category Filter Pills -->
+        <!-- Category Filter Pills (dynamic from database) -->
         <div class="filter-pills-row">
             <div class="filter-pills" id="filterContainer">
                 <button class="filter-pill active" data-filter="all">
                     <span class="pill-dot"></span>
                     <span>All Projects</span>
-                    <span class="pill-count">20</span>
+                    <span class="pill-count">{{ total_count }}</span>
                 </button>
-                <button class="filter-pill" data-filter="web">
-                    <span>Web Apps</span>
-                    <span class="pill-count">5</span>
+                {% for slug, count in categories.items %}
+                <button class="filter-pill" data-filter="{{ slug }}">
+                    <span>{{ slug|title }}</span>
+                    <span class="pill-count">{{ count }}</span>
                 </button>
-                <button class="filter-pill" data-filter="api">
-                    <span>REST APIs</span>
-                    <span class="pill-count">1</span>
-                </button>
-                <button class="filter-pill" data-filter="automation">
-                    <span>Automation</span>
-                    <span class="pill-count">3</span>
-                </button>
-                <button class="filter-pill" data-filter="ai-data">
-                    <span>AI &amp; Data</span>
-                    <span class="pill-count">4</span>
-                </button>
-                <button class="filter-pill" data-filter="analytics">
-                    <span>Analytics</span>
-                    <span class="pill-count">5</span>
-                </button>
-                <button class="filter-pill" data-filter="desktop">
-                    <span>Desktop GUI</span>
-                    <span class="pill-count">2</span>
-                </button>
+                {% endfor %}
             </div>
 
             <div class="results-counter" id="resultsCounter">
