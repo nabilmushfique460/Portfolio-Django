@@ -67,13 +67,13 @@
             <article class="service-card-vanguard" id="service-{{ service.id }}">
                 <!-- Card Media Header -->
                 <div class="service-media">
-                    <img src="{{ service.image }}" alt="{{ service.title }}" loading="lazy" class="service-img">
+                    <img src="{{ service.display_image }}" alt="{{ service.title }}" loading="lazy" class="service-img">
                     <div class="service-media-overlay"></div>
 
                     <!-- Top Glass Chips -->
                     <div class="service-chips-row">
                         <span class="category-chip">{{ service.category }}</span>
-                        <span class="project-id-chip">#{{ service.id }}</span>
+                        <span class="project-id-chip">#{{ service.display_id }}</span>
                     </div>
 
                     <!-- Badge Ribbon -->
@@ -96,7 +96,7 @@
                     <div class="service-deliverables">
                         <div class="deliverables-heading">CORE DELIVERABLES:</div>
                         <ul class="deliverables-list">
-                            {% for item in service.deliverables %}
+                            {% for item in service.deliverables_list %}
                             <li>
                                 <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="20 6 9 17 4 12"></polyline>
@@ -109,7 +109,7 @@
 
                     <!-- Tech Stack Pills -->
                     <div class="service-tags">
-                        {% for tag in service.tags %}
+                        {% for tag in service.tags_list %}
                         <span class="tech-tag">{{ tag }}</span>
                         {% endfor %}
                     </div>

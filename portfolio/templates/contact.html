@@ -222,6 +222,24 @@
                                 </p>
                             </div>
                         </div>
+                        {% elif saved_delivery_failed %}
+                        <div class="vanguard-success-banner" style="border-left-color: #f59e0b;" role="alert">
+                            <div class="success-icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <div class="success-content">
+                                <h3 class="success-heading" style="color: #f59e0b;">TRANSMISSION REGISTERED</h3>
+                                <p class="success-subtext">
+                                    Your message has been securely recorded in our database. However, outgoing email notification was temporarily delayed. We will still review your message shortly.
+                                </p>
+                            </div>
+                        </div>
                         {% endif %}
 
                         <p class="form-intro-note">
@@ -232,6 +250,14 @@
                         <!-- The Contact Form -->
                         <form method="post" class="vanguard-form" novalidate>
                             {% csrf_token %}
+                            {{ form.website }}
+                            {% if form.non_field_errors %}
+                            <div class="form-error-list" style="margin-bottom: 1rem;">
+                                {% for error in form.non_field_errors %}
+                                <span class="field-error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
 
                             <!-- Name Field -->
                             <div class="form-group {% if form.name.errors %}has-error{% endif %}">

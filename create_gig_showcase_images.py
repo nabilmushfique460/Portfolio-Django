@@ -7,7 +7,10 @@ import asyncio
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 
 SCREENSHOTS_DIR = os.path.join(os.path.dirname(__file__), "gig_assets")
-ARTIFACTS_DIR = r"C:\Users\NABIL\.gemini\antigravity-ide\brain\97472252-df7c-4787-8965-8a337eb0344f"
+ARTIFACTS_DIR = os.environ.get(
+    "ARTIFACTS_DIR",
+    os.path.join(os.path.dirname(__file__), "gig_assets", "artifacts")
+)
 
 os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)

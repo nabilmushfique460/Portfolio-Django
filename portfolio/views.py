@@ -1,7 +1,9 @@
 import logging
 from django.conf import settings
 from django.core.mail import send_mail
-from django.shortcuts import render
+from django.db.models import Count
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import ContactForm
 from .models import Project, Service
 
@@ -17,67 +19,38 @@ def about(request):
     """Show the Projects (About) page — data is pulled from the database."""
     projects = Project.objects.all()
 
-    # Build template-friendly dicts that match what about.html expects.
-    project_list = []
-    for idx, p in enumerate(projects, start=1):
-        project_list.append({
-            'id': idx,
-            'title': p.title,
-            'description': p.description,
-            'url': p.url,
-            'image': p.display_image,
-            'category': p.category,
-            'category_slug': p.category_slug,
-            'badge': p.badge,
-            'tags': p.tags_list,
-            'featured': p.featured,
-        })
-
-    # Build dynamic category counts for the filter pills.
-    categories = {}
-    for proj in project_list:
-        slug = proj['category_slug']
-        categories[slug] = categories.get(slug, 0) + 1
+    # Build dynamic category counts using ORM aggregation
+    cat_counts = (
+        Project.objects.values('category_slug')
+        .annotate(total=Count('id'))
+        .order_by('category_slug')
+    )
+    categories = {item['category_slug']: item['total'] for item in cat_counts}
 
     return render(request, 'about.html', {
-        'projects': project_list,
+        'projects': projects,
         'categories': categories,
-        'total_count': len(project_list),
+        'total_count': projects.count(),
     })
 
 
 def services(request):
     """Show the Services / Offerings page — data is pulled from the database."""
     service_qs = Service.objects.all()
-
-    service_list = []
-    for idx, s in enumerate(service_qs, start=1):
-        service_list.append({
-            'id': f'{idx:02d}',
-            'title': s.title,
-            'category': s.category,
-            'description': s.description,
-            'deliverables': s.deliverables_list,
-            'tags': s.tags_list,
-            'image': s.display_image,
-            'badge': s.badge,
-        })
-
-    return render(request, 'services.html', {'services': service_list})
+    return render(request, 'services.html', {'services': service_qs})
 
 
 def contact(request):
     """
     Show the Contact page.
 
-    - On a normal visit (GET request), show an empty ContactForm.
-    - On a form submission (POST request), validate the data. If it's
-      valid, save the message to db.sqlite3, send a confirmation email
-      to the sender and a notification email to the admin, and flag success=True
-      so the template can show a "Thank you" message. If it's invalid,
-      Django automatically re-shows the form with error messages next to each field.
+    - On GET: renders empty ContactForm, checking for 'status' query param from PRG redirect.
+    - On POST: validates form (including anti-bot honeypot). If valid, saves message,
+      dispatches confirmation and notification emails, and redirects (PRG pattern).
     """
-    success = False
+    status = request.GET.get('status')
+    success = (status == 'success')
+    saved_delivery_failed = (status == 'saved_delivery_failed')
 
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -112,6 +85,7 @@ def contact(request):
                 f"{message}\n"
             )
 
+            email_sent = False
             try:
                 # Send confirmation email to user
                 send_mail(
@@ -129,16 +103,19 @@ def contact(request):
                     recipient_list=[admin_email],
                     fail_silently=False,
                 )
+                email_sent = True
             except Exception as e:
                 logger.error("Failed to send contact email: %s", e)
 
-            success = True
-            form = ContactForm()  # reset to a blank form after success
+            # Post/Redirect/Get pattern: redirect to GET with status param
+            target_status = 'success' if email_sent else 'saved_delivery_failed'
+            return redirect(f"{reverse('contact')}?status={target_status}")
     else:
         form = ContactForm()
 
     context = {
         'form': form,
         'success': success,
+        'saved_delivery_failed': saved_delivery_failed,
     }
     return render(request, 'contact.html', context)

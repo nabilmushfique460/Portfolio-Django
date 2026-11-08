@@ -46,6 +46,12 @@ class Project(models.Model):
         return self.title
 
     @property
+    def display_id(self):
+        """Return two-digit order or pk for display formatting."""
+        num = self.order or self.id or 1
+        return f"{num:02d}"
+
+    @property
     def display_image(self):
         """Return the uploaded image URL or the external URL fallback."""
         if self.image:
@@ -100,6 +106,12 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def display_id(self):
+        """Return two-digit order or pk for display formatting."""
+        num = self.order or self.id or 1
+        return f"{num:02d}"
 
     @property
     def display_image(self):

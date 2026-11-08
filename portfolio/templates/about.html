@@ -107,14 +107,14 @@
             <article
                 class="project-card {% if project.featured %}is-featured{% endif %}"
                 data-category="{{ project.category_slug }}"
-                data-title="{{ project.title|lower }}"
-                data-tags="{% for tag in project.tags %}{{ tag|lower }} {% endfor %}"
-                data-desc="{{ project.description|lower }}"
+                data-title="{{ project.title|lower|escape }}"
+                data-tags="{% for tag in project.tags_list %}{{ tag|lower }} {% endfor %}"
+                data-desc="{{ project.description|lower|escape }}"
             >
                 <!-- Card Media Container -->
                 <div class="project-media">
                     <img
-                        src="{{ project.image }}"
+                        src="{{ project.display_image }}"
                         alt="{{ project.title }} preview"
                         class="project-img"
                     >
@@ -126,7 +126,7 @@
                             <span class="chip-status-dot"></span>
                             {{ project.category }}
                         </span>
-                        <span class="project-index">#{{ project.id|stringformat:"02d" }}</span>
+                        <span class="project-index">#{{ project.display_id }}</span>
                     </div>
 
                     {% if project.featured %}
@@ -143,7 +143,7 @@
                 <div class="project-card-body">
                     <!-- Tech Stack Tags -->
                     <div class="tech-tags-list">
-                        {% for tag in project.tags %}
+                        {% for tag in project.tags_list %}
                         <span class="tech-tag">{{ tag }}</span>
                         {% endfor %}
                     </div>
