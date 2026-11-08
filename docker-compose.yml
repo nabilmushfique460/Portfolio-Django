@@ -5,6 +5,11 @@ services:
     container_name: portfolio-django-app
     ports:
       - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+      - ./media:/app/media
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
